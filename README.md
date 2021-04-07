@@ -16,6 +16,16 @@ $ nodeenv env
 $ source env/bin/activate
 ```
 
+### Настройка
+
+```s
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_USER=root
+DB_PASS=
+DB_NAME=
+```
+
 ### Запуск
 
 ```sh
