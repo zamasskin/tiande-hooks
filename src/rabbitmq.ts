@@ -28,15 +28,18 @@ export async function getConnection(h: string) {
 }
 
 export async function getConnAndCntWorkersByQuery(q: string) {
-  const [
-    conQ,
-  ] = await query('SELECT * FROM b_rabbitmq_queues WHERE UF_QUERY = ?', [q]);
+  const sql = `
+SELECT q.UF_WORKS_COUNT AS count, c.UF_HOST AS host 
+FROM b_rabbitmq_queues as q
+LEFT JOIN b_rabbitmq_connections AS c ON c.ID = q.UF_SERVER
+WHERE UF_QUERY = ?
+  `;
+  const [conQ]: Array<{count: number; host: string}> = await query(sql, [q]);
   if (!conQ) {
     throw new Error('query not found');
   }
-
   return {
-    count: conQ.UF_WORKS_COUNT,
-    connection: await getConnection(conQ.UF_SERVER),
+    count: conQ.count,
+    connection: await getConnection(conQ.host),
   };
 }
