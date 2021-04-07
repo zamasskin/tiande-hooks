@@ -26,3 +26,17 @@ export async function getConnection(h: string) {
   );
   return connection;
 }
+
+export async function getConnAndCntWorkersByQuery(q: string) {
+  const [
+    conQ,
+  ] = await query('SELECT * FROM b_rabbitmq_queues WHERE UF_QUERY = ?', [q]);
+  if (!conQ) {
+    throw new Error('query not found');
+  }
+
+  return {
+    count: conQ.UF_WORKS_COUNT,
+    connection: await getConnection(conQ.UF_SERVER),
+  };
+}
