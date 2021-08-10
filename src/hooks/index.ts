@@ -1,12 +1,18 @@
-import {updateCatElQuantityByQuery} from './catalog';
-import {QUERY_CATALOG_QUANTITY_UPDATE} from '../constants';
 import {getConnAndCntWorkersByQuery} from '../rabbitmq';
+import {QUERY_CATALOG_QUANTITY_UPDATE, QUERY_ORDER_EVENT} from '../constants';
+import {updateCatElQuantityByQuery} from './catalog';
+import {startOrderEvent} from './order';
 
 class RegisterHooks {
   protected hooks = [
     {
       query: QUERY_CATALOG_QUANTITY_UPDATE,
       call: updateCatElQuantityByQuery,
+      countPackage: 20,
+    },
+    {
+      query: QUERY_ORDER_EVENT,
+      call: startOrderEvent,
       countPackage: 20,
     },
   ];
