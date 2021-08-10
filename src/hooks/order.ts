@@ -3,6 +3,7 @@ import {Channel, ConsumeMessage} from 'amqplib';
 import axios from 'axios';
 import crypto from 'crypto';
 import moment from 'moment';
+import {callMethodBoolean} from '../api';
 
 export async function startOrderEvent(ch: Channel, msg: ConsumeMessage) {
   if (msg) {
@@ -25,9 +26,16 @@ export async function startOrderEvent(ch: Channel, msg: ConsumeMessage) {
         .update(jsonString + login + password)
         .digest('hex');
 
-      const result = await axios.post(url, {login, signature, params});
+      const {data} = await axios.post(url, {login, signature, params});
+      if (data.error) {
+        throw new Error(data.error + '[br]' + JSON.stringify(params));
+      }
     } catch (e) {
-      console.log(e);
+      callMethodBoolean('im.message.add', {
+        DIALOG_ID: 'chat127424',
+        system: 'Y',
+        message: e.message,
+      });
     } finally {
       ch.ack(msg);
     }
