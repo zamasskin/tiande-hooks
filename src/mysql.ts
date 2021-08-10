@@ -1,4 +1,5 @@
 import mysql, {Connection} from 'mysql2';
+import {callMethodBoolean} from './api';
 import {
   dbDatabase,
   dbHost,
@@ -52,18 +53,12 @@ const _knex = knex({
     pool: {min: dbMinConnections, max: dbMaxConnections},
   },
   log: {
-    warn(message) {
-      console.log(message);
-    },
+    warn(message) {},
     error(err) {
       console.error(err);
     },
-    deprecate(message) {
-      console.log(message);
-    },
-    debug(message) {
-      console.debug(message);
-    },
+    deprecate(message) {},
+    debug(message) {},
   },
   debug: dbRelease === Release.development,
 });
