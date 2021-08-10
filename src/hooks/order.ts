@@ -26,7 +26,11 @@ export async function startOrderEvent(ch: Channel, msg: ConsumeMessage) {
         .update(jsonString + login + password)
         .digest('hex');
 
-      const {data} = await axios.post(url, {login, signature, params});
+      const response = await axios.post(url, {login, signature, params});
+      const {data} = response;
+      if (!data) {
+        throw new Error(`[${response.status}] ${response.statusText}`);
+      }
       if (data.error) {
         throw new Error(data.error + '[br]' + JSON.stringify(params));
       }
