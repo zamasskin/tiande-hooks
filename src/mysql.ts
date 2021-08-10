@@ -1,5 +1,17 @@
 import mysql, {Connection} from 'mysql2';
-import {dbDatabase, dbHost, dbPass, dbPort, dbUser} from './settings';
+import {
+  dbDatabase,
+  dbHost,
+  dbPass,
+  dbPort,
+  dbUser,
+  dbMaxConnections,
+  dbMinConnections,
+  Release,
+  dbRelease,
+} from './settings';
+import knex from 'knex';
+import {attachPaginate} from 'knex-paginate';
 
 export function createConnection(): Connection {
   return mysql.createConnection({
@@ -28,3 +40,32 @@ export async function query(
   const [rows]: [any[], any] = await pool.promise().query(sql, values);
   return rows || [];
 }
+
+const _knex = knex({
+  client: 'mysql2',
+  connection: {
+    host: dbHost,
+    user: dbUser,
+    port: dbPort,
+    password: dbPass,
+    database: dbDatabase,
+    pool: {min: dbMinConnections, max: dbMaxConnections},
+  },
+  log: {
+    warn(message) {
+      console.log(message);
+    },
+    error(err) {
+      console.error(err);
+    },
+    deprecate(message) {
+      console.log(message);
+    },
+    debug(message) {
+      console.debug(message);
+    },
+  },
+  debug: dbRelease === Release.development,
+});
+attachPaginate();
+export default _knex;
