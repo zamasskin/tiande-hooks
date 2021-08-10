@@ -1,3 +1,4 @@
-import {startUpdateCatElQuantity} from './hooks/catalog';
+import {Hooks} from './hooks';
 
-startUpdateCatElQuantity();
+const hooks = new Hooks();
+hooks.run();

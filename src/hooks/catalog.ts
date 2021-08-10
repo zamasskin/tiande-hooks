@@ -1,6 +1,7 @@
 import {updateCatElQuantity, getAllCatId} from '../catalog/quantity';
 import {QUERY_CATALOG_QUANTITY_UPDATE} from '../constants';
 import {getConnAndCntWorkersByQuery, getConnection} from '../rabbitmq';
+import {Channel, ConsumeMessage} from 'amqplib';
 
 export async function startUpdateCatElQuantity() {
   const q = QUERY_CATALOG_QUANTITY_UPDATE;
@@ -17,6 +18,18 @@ export async function startUpdateCatElQuantity() {
         ch.ack(msg);
       }
     });
+  }
+}
+
+export async function updateCatElQuantityByQuery(
+  ch: Channel,
+  msg: ConsumeMessage
+) {
+  if (msg) {
+    if (Number(msg.content)) {
+      await updateCatElQuantity(Number(msg.content));
+    }
+    ch.ack(msg);
   }
 }
 
