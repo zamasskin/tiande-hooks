@@ -13,7 +13,7 @@ class RegisterHooks {
 }
 
 export class Hooks extends RegisterHooks {
-  public async getChanelByQuery(q: string, call: Function, countPackage = 1) {
+  public async startQuery(q: string, call: Function, countPackage = 1) {
     const {count, connection} = await getConnAndCntWorkersByQuery(q);
     for (let i = 0; i < count; i++) {
       const ch = await connection.createChannel();
@@ -27,10 +27,10 @@ export class Hooks extends RegisterHooks {
   public async run() {
     for (const hook of this.hooks) {
       try {
-        this.getChanelByQuery(hook.query, hook.call, hook.countPackage);
+        await this.startQuery(hook.query, hook.call, hook.countPackage);
         console.log('Start hook: ' + hook.query);
       } catch (e) {
-        console.error('Error hooks: ' + hook.query + '. Error' + e.message);
+        console.error('Error hooks: ' + hook.query + '. Error ' + e.message);
       }
     }
   }
