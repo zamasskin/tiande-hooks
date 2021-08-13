@@ -12,7 +12,7 @@ export async function startOrderEvent(ch: Channel, msg: ConsumeMessage) {
       if (!params.orderId) {
         return;
       }
-      const url = 'https://devbx.tiande.ru/api/v1/sale/order/event.php';
+      const url = 'https://tiande.ru/api/v1/sale/order/event.php';
       const login = 'api_order_event';
       const password = 'jCipoTDWhhIUfkRvcOMWDk3';
 
