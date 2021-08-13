@@ -12,6 +12,7 @@ export async function startOrderEvent(ch: Channel, msg: ConsumeMessage) {
       if (!params.orderId) {
         return;
       }
+      const strMsg = String(msg.content);
       const url = 'https://tiande.ru/api/v1/sale/order/event.php';
       const login = 'api_order_event';
       const password = 'jCipoTDWhhIUfkRvcOMWDk3';
@@ -29,7 +30,9 @@ export async function startOrderEvent(ch: Channel, msg: ConsumeMessage) {
       const response = await axios.post(url, {login, signature, params});
       const {data} = response;
       if (!data) {
-        throw new Error(`[${response.status}] ${response.statusText}`);
+        throw new Error(
+          `[${response.status}] ${response.statusText} ${strMsg}`
+        );
       }
       if (data.error) {
         throw new Error(data.error + '[br]' + JSON.stringify(params));
