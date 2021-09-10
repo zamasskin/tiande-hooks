@@ -20,11 +20,11 @@ class RegisterHooks {
       call: startOrderEvent,
       countPackage: 20,
     },
-    {
-      query: QUERY_EXCHANGE_OLD_BASKET,
-      call: startOldBasketEvents,
-      countPackage: 20,
-    },
+    // {
+    //   query: QUERY_EXCHANGE_OLD_BASKET,
+    //   call: startOldBasketEvents,
+    //   countPackage: 20,
+    // },
   ];
 }
 
