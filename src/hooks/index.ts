@@ -1,7 +1,12 @@
 import {getConnAndCntWorkersByQuery} from '../rabbitmq';
-import {QUERY_CATALOG_QUANTITY_UPDATE, QUERY_ORDER_EVENT} from '../constants';
+import {
+  QUERY_CATALOG_QUANTITY_UPDATE,
+  QUERY_ORDER_EVENT,
+  QUERY_EXCHANGE_OLD_BASKET,
+} from '../constants';
 import {updateCatElQuantityByQuery} from './catalog';
 import {startOrderEvent} from './order';
+import {startOldBasketEvents} from './oldbasket';
 
 class RegisterHooks {
   protected hooks = [
@@ -13,6 +18,11 @@ class RegisterHooks {
     {
       query: QUERY_ORDER_EVENT,
       call: startOrderEvent,
+      countPackage: 20,
+    },
+    {
+      query: QUERY_EXCHANGE_OLD_BASKET,
+      call: startOldBasketEvents,
       countPackage: 20,
     },
   ];
