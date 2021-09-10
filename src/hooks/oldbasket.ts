@@ -20,7 +20,7 @@ export async function startOldBasketEvents(ch: Channel, msg: ConsumeMessage) {
     callMethodBoolean('im.message.add', {
       DIALOG_ID: 'chat127424',
       system: 'Y',
-      message: e.message,
+      message: '[b]exchangeoldbasket[/b] [br]' + e.message + '[br]' + strMsg,
     });
   } finally {
     ch.ack(msg);
