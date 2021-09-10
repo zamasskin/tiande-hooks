@@ -2,13 +2,26 @@ import axios, {AxiosError} from 'axios';
 import {Channel, ConsumeMessage} from 'amqplib';
 import {callMethodBoolean} from '../api';
 
-export async function startOldBasketEvents(ch: Channel, msg: ConsumeMessage) {
-  const sendParams = JSON.parse(String(msg.content));
-  const strMsg = String(msg.content);
+const timeout = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+async function sendData(sendParams: any, step = 0): Promise<any> {
   const url =
     'https://portal.tian.de.com/rest/6/uv0m0nq1oddx7gus/tiandeintegrations.exchangeoldbasket';
   try {
     const response = await axios.post(url, sendParams);
+  } catch (e) {
+    if (step > 5) {
+      throw e;
+    }
+    await timeout(500);
+    return await sendData(sendParams, ++step);
+  }
+}
+
+export async function startOldBasketEvents(ch: Channel, msg: ConsumeMessage) {
+  const sendParams = JSON.parse(String(msg.content));
+  const strMsg = String(msg.content);
+  try {
+    const response = await sendData(sendParams);
     const {data} = response;
     if (!data) {
       throw new Error(`[${response.status}] ${response.statusText} ${strMsg}`);
