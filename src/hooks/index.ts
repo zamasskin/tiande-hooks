@@ -23,7 +23,7 @@ class RegisterHooks {
     {
       query: QUERY_EXCHANGE_OLD_BASKET,
       call: startOldBasketEvents,
-      countPackage: 2,
+      countPackage: 20,
     },
   ];
 }

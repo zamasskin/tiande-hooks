@@ -13,7 +13,7 @@ async function sendData(sendParams: any, step = 0): Promise<any> {
     if (step > 5) {
       throw e;
     }
-    await timeout(500);
+    await timeout(200);
     return await sendData(sendParams, ++step);
   }
 }
