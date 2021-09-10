@@ -8,6 +8,7 @@ async function sendData(sendParams: any, step = 0): Promise<any> {
     'https://portal.tian.de.com/rest/6/uv0m0nq1oddx7gus/tiandeintegrations.exchangeoldbasket';
   try {
     const response = await axios.post(url, sendParams);
+    return response;
   } catch (e) {
     if (step > 5) {
       throw e;
