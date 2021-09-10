@@ -7,12 +7,12 @@ import {callMethodBoolean} from '../api';
 
 export async function startOrderEvent(ch: Channel, msg: ConsumeMessage) {
   if (msg) {
+    const strMsg = String(msg.content);
     try {
       const params = JSON.parse(String(msg.content));
       if (!params.orderId) {
         return;
       }
-      const strMsg = String(msg.content);
       const url = 'https://tiande.ru/api/v1/sale/order/event.php';
       const login = 'api_order_event';
       const password = 'jCipoTDWhhIUfkRvcOMWDk3';
@@ -37,11 +37,11 @@ export async function startOrderEvent(ch: Channel, msg: ConsumeMessage) {
       if (data.error) {
         throw new Error(data.error + '[br]' + JSON.stringify(params));
       }
-    } catch (e) {
+    } catch (e: any) {
       callMethodBoolean('im.message.add', {
         DIALOG_ID: 'chat127424',
         system: 'Y',
-        message: e.message,
+        message: '[b]OrderEvent[/b] [br]' + e.message + '[br]' + strMsg,
       });
     } finally {
       ch.ack(msg);
