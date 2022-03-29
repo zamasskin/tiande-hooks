@@ -57,10 +57,11 @@ export async function startExchangeDeal(ch: Channel, msg: ConsumeMessage) {
       const soapCall: Function = _.get(soapClient, 'exchangeDealAsync');
       await soapCall.call(null, [{arDeals: [[order]]}]);
     } catch (e: any) {
+      const error = e?.body ? `soapError: ${e?.body}` : e.message;
       callMethodBoolean('im.message.add', {
         DIALOG_ID: 'chat127424',
         system: 'Y',
-        message: '[b]startExchangeDeal[/b] [br]' + e.message + '[br]' + orderId,
+        message: '[b]startExchangeDeal[/b] [br]' + error + '[br]' + orderId,
       });
     } finally {
       ch.ack(msg);
