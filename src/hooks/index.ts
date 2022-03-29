@@ -3,10 +3,12 @@ import {
   QUERY_CATALOG_QUANTITY_UPDATE,
   QUERY_ORDER_EVENT,
   QUERY_EXCHANGE_OLD_BASKET,
+  QUERY_EXCHANGE_DEAL,
 } from '../constants';
 import {updateCatElQuantityByQuery} from './catalog';
 import {startOrderEvent} from './order';
 import {startOldBasketEvents} from './oldbasket';
+import {startExchangeDeal} from './exchangedeal';
 
 class RegisterHooks {
   protected hooks = [
@@ -18,6 +20,11 @@ class RegisterHooks {
     {
       query: QUERY_ORDER_EVENT,
       call: startOrderEvent,
+      countPackage: 20,
+    },
+    {
+      query: QUERY_EXCHANGE_DEAL,
+      call: startExchangeDeal,
       countPackage: 20,
     },
     // {
@@ -45,7 +52,7 @@ export class Hooks extends RegisterHooks {
       try {
         await this.startQuery(hook.query, hook.call, hook.countPackage);
         console.log('Start hook: ' + hook.query);
-      } catch (e) {
+      } catch (e: any) {
         console.error('Error hooks: ' + hook.query + '. Error ' + e.message);
       }
     }
