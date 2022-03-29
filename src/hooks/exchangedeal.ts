@@ -44,18 +44,19 @@ async function getOrderData(id: number) {
     date,
     params: {id},
   });
-  return response.data;
+  return response.data.response;
 }
 
 export async function startExchangeDeal(ch: Channel, msg: ConsumeMessage) {
   if (msg) {
     const orderId = Number(msg.content);
     try {
+      console.log(orderId);
       const soapUrl = await getSoapUrl();
       const order = await getOrderData(orderId);
       const soapClient = await soap.createClientAsync(soapUrl);
       const soapCall: Function = _.get(soapClient, 'exchangeDealAsync');
-      await soapCall.call(null, [{arDeals: [order]}]);
+      await soapCall.call(null, [{arDeals: [[order]]}]);
     } catch (e: any) {
       callMethodBoolean('im.message.add', {
         DIALOG_ID: 'chat127424',
