@@ -51,7 +51,6 @@ export async function startExchangeDeal(ch: Channel, msg: ConsumeMessage) {
   if (msg) {
     const orderId = Number(msg.content);
     try {
-      console.log(orderId);
       const soapUrl = await getSoapUrl();
       const order = await getOrderData(orderId);
       const soapClient = await soap.createClientAsync(soapUrl);
